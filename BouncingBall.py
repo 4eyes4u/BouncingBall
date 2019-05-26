@@ -4,7 +4,7 @@ import logging
 import pygame
 
 '''
-This class implementes all methods that are necesarry for plots and simulation.
+This class implements all methods that are necesarry for plots and simulation.
 '''
 
 
