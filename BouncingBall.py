@@ -105,7 +105,7 @@ class BouncingBall:
         pygame.init()
         pygame.display.set_caption('Simulation')
         screen = pygame.display.set_mode([WIDTH, HEIGHT])
-        font = pygame.font.Font('./consola.ttf', 14)
+        font = pygame.font.Font('./fonts/consola.ttf', 14)
         clock = pygame.time.Clock()
         x_scale = max([self.r[idx][:, 0][-1] for idx in indices]) + 0.25
         y_scale = max([np.max(self.r[idx][:, 1]) for idx in indices]) + 0.25
