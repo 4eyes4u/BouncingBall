@@ -1,3 +1,4 @@
+import visdom
 from matplotlib import pyplot as plt
 
 
@@ -36,9 +37,13 @@ def comparison_plot(ball):
     plt.legend()
 
 
-def simulation(ball, indices):
+def simulation(ball, indices, use_visdom=False):
     '''
     #REQ: 'Indices' is a list.
     '''
 
-    ball.simulation(indices)
+    if not use_visdom:
+        ball.simulation_client(indices)
+    else:
+        viz = visdom.Visdom()
+        ball.simulation_server(indices, viz, 100 * len(indices))

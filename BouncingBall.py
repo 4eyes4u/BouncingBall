@@ -93,7 +93,50 @@ class BouncingBall:
         ax.plot(self.t, self.r[idx][:, 1], 'g', linestyle='-', label='y')
         self.logger.info('plot_xy #{} has been calculated'.format(idx))
 
-    def simulation(self, indices):
+    def simulation_server(self, indices, viz, step):
+        xtickmin = 0
+        xtickmax = max([self.r[idx][:, 0][-1] for idx in indices]) + 0.25
+        ytickmin = 0
+        ytickmax = max([np.max(self.r[idx][:, 1]) for idx in indices]) + 0.25
+        win = None
+        opts = dict(
+            xtickmin=xtickmin,
+            xtickmax=xtickmax,
+            ytickmin=ytickmin,
+            ytickmax=ytickmax,
+            xlabel='x [m]',
+            ylabel='y [m]',
+            legend=[str(np.round(np.rad2deg(self.angles[idx]), 0))
+                    for idx in indices],
+            width=1000,
+            height=600,
+        )
+
+        self.logger.info('Simulation has started')
+        cnt, i, prev = 0, 0, 0
+        # for i in range(self.n_steps // step):
+        while cnt < self.n_steps:
+            cnt += step
+            for idx in indices:
+                deg = np.round(np.rad2deg(self.angles[idx]), 0)
+                if win is None:
+                    win = viz.line(X=self.r[idx][:, 0][prev: cnt],
+                                   Y=self.r[idx][:, 1][prev: cnt],
+                                   name=str(deg),
+                                   opts=opts)
+                else:
+                    viz.line(X=self.r[idx][:, 0][prev: cnt],
+                             Y=self.r[idx][:, 1][prev: cnt],
+                             win=win,
+                             update='append',
+                             name=str(deg))
+            prev = cnt
+            if cnt > self.n_steps // (len(indices) + 1):
+                step = min(int(1.05 * step), 75 * len(indices))
+            i = i + 1
+        self.logger.info('Simulation has finished')
+
+    def simulation_client(self, indices):
         WIDTH, HEIGHT = 1280, 520
         COLORS = [(0, 0, 255),  # blue
                   (255, 128, 0),  # orange
@@ -148,6 +191,7 @@ class BouncingBall:
 
         pygame.quit()
         self.logger.info('Simulation has ended')
+
 
 if __name__ == '__main__':
     # basic example

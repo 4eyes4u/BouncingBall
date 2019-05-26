@@ -2,6 +2,7 @@ import argparse
 import logging
 import pygame
 import threading
+import visdom
 import numpy as np
 from BouncingBall import BouncingBall
 from utils import *
@@ -30,7 +31,7 @@ if __name__ == '__main__':
 
     singleton_plot(ball, 3)
     comparison_plot(ball)
-    thread = threading.Thread(target=simulation, args=(ball, [0, 1, 2, 3, 4]))
+    thread = threading.Thread(target=simulation, args=(ball, [0, 3, 4], True))
     thread.daemon = True
     thread.start()
     plt.show()
