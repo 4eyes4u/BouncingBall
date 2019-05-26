@@ -59,7 +59,7 @@ class BouncingBall:
 
         self.r[idx], self.v[idx] = r, v
         self.Ek[idx], self.Ep[idx], self.Es[idx] = Ek, Ep, Es
-        self.logger.info('Plot #{} has been calculated'.format(idx))
+        self.logger.info('Plot #{} has been drawn'.format(idx))
 
     def _calculate(self):
         if self._lazy_flag is False:
@@ -72,12 +72,12 @@ class BouncingBall:
         if idx is not None:
             angle = np.round(np.degrees(self.angles[idx]), 0)
             ax.plot(self.r[idx][:, 0], self.r[idx][:, 1], label='{}'.format(angle))
-            self.logger.info('plot_r #{} has been calculated'.format(idx))
+            self.logger.info('plot_r #{} has been drawn'.format(idx))
         else:
             for i in range(self.n_plots):
                 angle = np.round(np.degrees(self.angles[i]), 0)
                 ax.plot(self.r[i][:, 0], self.r[i][:, 1], label='{}'.format(angle), linewidth=0.75)
-            self.logger.info('Comparison plot_r has been calculated')
+            self.logger.info('Comparison plot_r has been drawn')
 
     def plot_E(self, ax, idx):
         angle = np.round(np.degrees(self.angles[idx]), 0)
@@ -85,16 +85,15 @@ class BouncingBall:
         ax.plot(self.r[idx][:, 0], self.Ep[idx], 'g', linestyle='-.', label='Ep', linewidth=0.5)
         ax.plot(self.r[idx][:, 0], self.Es[idx], 'b', linestyle='-.', label='Es', linewidth=0.5)
         ax.plot(self.r[idx][:, 0], self.Ek[idx] + self.Ep[idx] + self.Es[idx], 'k-', label='E_sum', linewidth=1.5)
-        self.logger.info('plot_E #{} has been calculated'.format(idx))
+        self.logger.info('plot_E #{} has been drawn'.format(idx))
 
     def plot_xy(self, ax, idx):
         angle = np.round(np.degrees(self.angles[idx]), 0)
         ax.plot(self.t, self.r[idx][:, 0], 'r', linestyle='-', label='x')
         ax.plot(self.t, self.r[idx][:, 1], 'g', linestyle='-', label='y')
-        self.logger.info('plot_xy #{} has been calculated'.format(idx))
+        self.logger.info('plot_xy #{} has been drawn'.format(idx))
 
-    def simulation(self, indices):
-        WIDTH, HEIGHT = 1280, 520
+    def simulation(self, indices, WIDTH=1280, HEIGHT=520):
         COLORS = [(0, 0, 255),  # blue
                   (255, 128, 0),  # orange
                   (0, 255, 0),  # green
@@ -102,10 +101,11 @@ class BouncingBall:
                   (128, 0, 128),  # violet
                   ]
 
+        self.logger.info('Simulation has started')
         pygame.init()
-        pygame.display.set_caption('Bouncing ball simulation')
+        pygame.display.set_caption('Simulation')
         screen = pygame.display.set_mode([WIDTH, HEIGHT])
-        font = pygame.font.Font('C:\\Windows\\Fonts\\consola.ttf', 14)
+        font = pygame.font.Font('./consola.ttf', 14)
         clock = pygame.time.Clock()
         x_scale = max([self.r[idx][:, 0][-1] for idx in indices]) + 0.25
         y_scale = max([np.max(self.r[idx][:, 1]) for idx in indices]) + 0.25
@@ -121,7 +121,7 @@ class BouncingBall:
                 screen.blit(text, text_rect)
                 pygame.draw.circle(screen, COLORS[idx], [WIDTH - OFFSET_X, OFFSET_Y + 20 * (idx + 1)], 4)
 
-        # simulation is endless; only user can be stop it
+        # simulation is endless; only user can stop it
         done = False
         while not done:
             prepare_screen()
