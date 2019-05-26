@@ -8,7 +8,7 @@ from utils import *
 from matplotlib import pyplot as plt
 
 '''
-Solution for the problem 'Bouncing ball with air resistance (7.4.1)'
+Solution for the problem 'Bouncing ball with air resistance (7.5.1)'
 '''
 
 if __name__ == '__main__':
