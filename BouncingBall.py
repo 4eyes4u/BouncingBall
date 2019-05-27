@@ -19,8 +19,6 @@ class BouncingBall:
         self.n_plots = self.angles.shape[0]
         self.n_steps = int(round(total_time / dt))
         self.t = np.linspace(0, total_time, self.n_steps)
-        # for lazy calculation
-        self._lazy_flag = False
         self.r, self.v = np.zeros((2, self.n_plots, self.n_steps, 2))
         self.Ek, self.Ep, self.Es = np.zeros((3, self.n_plots, self.n_steps,))
         self.logger = logger
@@ -62,11 +60,9 @@ class BouncingBall:
         self.logger.info('Plot #{} has been calculated'.format(idx))
 
     def _calculate(self):
-        if self._lazy_flag is False:
-            self._lazy_flag = True
-            for i in range(self.n_plots):
-                self._calc_singleton(self.angles[i], i)
-            self.logger.info('Singletons have been calculated')
+        for i in range(self.n_plots):
+            self._calc_singleton(self.angles[i], i)
+        self.logger.info('Singletons have been calculated')
 
     def plot_r(self, ax, idx=None):
         if idx is not None:
@@ -113,6 +109,7 @@ class BouncingBall:
         def prepare_screen():
             screen.fill((0, 0, 0))
             OFFSET_X, OFFSET_Y, OFFSET_F = 120, 50, 30
+            # drawing legend
             for idx in indices:
                 angle = np.round(np.degrees(self.angles[idx]), 0)
                 text = font.render('{}'.format(angle), True, (255, 255, 255), (0, 0, 0))
