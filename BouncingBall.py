@@ -59,7 +59,7 @@ class BouncingBall:
 
         self.r[idx], self.v[idx] = r, v
         self.Ek[idx], self.Ep[idx], self.Es[idx] = Ek, Ep, Es
-        self.logger.info('Plot #{} has been drawn'.format(idx))
+        self.logger.info('Plot #{} has been calculated'.format(idx))
 
     def _calculate(self):
         if self._lazy_flag is False:
