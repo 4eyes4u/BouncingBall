@@ -15,7 +15,7 @@ class BouncingBall:
         self.logger = logger
         self.args = {'m': m, 'R': R, 'h': h, 'v0': v0, 'k': k, 'dt': dt,
                      'g': 9.81, 'D': m * 9.81 / (v_term * v_term)}
-        self.angles = np.radians(np.linspace(15, 90, 6))
+        self.angles = np.radians(np.linspace(15, 75, 5))
         self.n_plots = self.angles.shape[0]
         self.n_steps = int(round(total_time / dt))
         self.t = np.linspace(0, total_time, self.n_steps)
