@@ -15,12 +15,10 @@ class BouncingBall:
         self.logger = logger
         self.args = {'m': m, 'R': R, 'h': h, 'v0': v0, 'k': k, 'dt': dt,
                      'g': 9.81, 'D': m * 9.81 / (v_term * v_term)}
-        self.angles = np.radians(np.linspace(15, 90, 6))
+        self.angles = np.radians(np.linspace(15, 75, 5))
         self.n_plots = self.angles.shape[0]
         self.n_steps = int(round(total_time / dt))
         self.t = np.linspace(0, total_time, self.n_steps)
-        # for lazy calculation
-        self._lazy_flag = False
         self.r, self.v = np.zeros((2, self.n_plots, self.n_steps, 2))
         self.Ek, self.Ep, self.Es = np.zeros((3, self.n_plots, self.n_steps,))
         self.logger = logger
@@ -62,22 +60,20 @@ class BouncingBall:
         self.logger.info('Plot #{} has been calculated'.format(idx))
 
     def _calculate(self):
-        if self._lazy_flag is False:
-            self._lazy_flag = True
-            for i in range(self.n_plots):
-                self._calc_singleton(self.angles[i], i)
-            self.logger.info('Singletons have been calculated')
+        for i in range(self.n_plots):
+            self._calc_singleton(self.angles[i], i)
+        self.logger.info('Singletons have been drawn')
 
     def plot_r(self, ax, idx=None):
         if idx is not None:
             angle = np.round(np.degrees(self.angles[idx]), 0)
             ax.plot(self.r[idx][:, 0], self.r[idx][:, 1], label='{}'.format(angle))
-            self.logger.info('plot_r #{} has been calculated'.format(idx))
+            self.logger.info('plot_r #{} has been drawn'.format(idx))
         else:
             for i in range(self.n_plots):
                 angle = np.round(np.degrees(self.angles[i]), 0)
                 ax.plot(self.r[i][:, 0], self.r[i][:, 1], label='{}'.format(angle), linewidth=0.75)
-            self.logger.info('Comparison plot_r has been calculated')
+            self.logger.info('Comparison plot_r has been drawn')
 
     def plot_E(self, ax, idx):
         angle = np.round(np.degrees(self.angles[idx]), 0)
@@ -85,13 +81,13 @@ class BouncingBall:
         ax.plot(self.r[idx][:, 0], self.Ep[idx], 'g', linestyle='-.', label='Ep', linewidth=0.5)
         ax.plot(self.r[idx][:, 0], self.Es[idx], 'b', linestyle='-.', label='Es', linewidth=0.5)
         ax.plot(self.r[idx][:, 0], self.Ek[idx] + self.Ep[idx] + self.Es[idx], 'k-', label='E_sum', linewidth=1.5)
-        self.logger.info('plot_E #{} has been calculated'.format(idx))
+        self.logger.info('plot_E #{} has been drawn'.format(idx))
 
     def plot_xy(self, ax, idx):
         angle = np.round(np.degrees(self.angles[idx]), 0)
         ax.plot(self.t, self.r[idx][:, 0], 'r', linestyle='-', label='x')
         ax.plot(self.t, self.r[idx][:, 1], 'g', linestyle='-', label='y')
-        self.logger.info('plot_xy #{} has been calculated'.format(idx))
+        self.logger.info('plot_xy #{} has been drawn'.format(idx))
 
     def simulation_server(self, indices, viz, step):
         xtickmin = 0
@@ -148,7 +144,7 @@ class BouncingBall:
         pygame.init()
         pygame.display.set_caption('Bouncing ball simulation')
         screen = pygame.display.set_mode([WIDTH, HEIGHT])
-        font = pygame.font.Font('C:\\Windows\\Fonts\\consola.ttf', 14)
+        font = pygame.font.Font('./fonts/consola.ttf', 14)
         clock = pygame.time.Clock()
         x_scale = max([self.r[idx][:, 0][-1] for idx in indices]) + 0.25
         y_scale = max([np.max(self.r[idx][:, 1]) for idx in indices]) + 0.25

@@ -9,7 +9,7 @@ from utils import *
 from matplotlib import pyplot as plt
 
 '''
-Solution for the problem 'Bouncing ball with air resistance (7.4.1)'
+Solution for the problem 'Bouncing ball with air resistance (7.5.1)'
 '''
 
 if __name__ == '__main__':
@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     singleton_plot(ball, 3)
     comparison_plot(ball)
-    thread = threading.Thread(target=simulation, args=(ball, [0, 3, 4], True))
+    thread = threading.Thread(target=simulation, args=(ball, [1, 3], True))
     thread.daemon = True
     thread.start()
     plt.show()
